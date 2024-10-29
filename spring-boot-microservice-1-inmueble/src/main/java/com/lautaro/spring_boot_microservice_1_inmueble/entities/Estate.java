@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name="inmueble")
-public class Property {
+public class Estate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
