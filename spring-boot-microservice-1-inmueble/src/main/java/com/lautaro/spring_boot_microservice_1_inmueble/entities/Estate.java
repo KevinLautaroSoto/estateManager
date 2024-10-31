@@ -20,7 +20,7 @@ public class Estate {
     @Column(name="address", length = 500, nullable = false)
     private String address;
 
-    @Column(value = name"picture", length = 1200, nullable = true)
+    @Column(name = "picture", length = 1200, nullable = true)
     private String picture;
 
     @Column(name="price", nullable = false)
