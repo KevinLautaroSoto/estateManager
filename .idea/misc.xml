@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/spring-boot-microservice-1-inmueble/pom.xml" />
         <option value="$PROJECT_DIR$/spring-boot-microservice-2-compra/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-boot-microservice-3-api-gateway/pom.xml" />
       </list>
     </option>
   </component>
