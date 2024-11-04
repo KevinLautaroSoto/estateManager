@@ -6,7 +6,6 @@ import com.lautaro.spring_boot_microservice_3_api_gateway.utils.SecurityUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SigningKeyResolverAdapter;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +21,7 @@ import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class JwtProviderImpl implements JwtProvider {
 
     //Clave secreta para firmar el token JWT, leida desde application.properties
@@ -55,6 +56,7 @@ public class JwtProviderImpl implements JwtProvider {
                 .compact();//Genera el token en formato completo.
     }
 
+    @Override
     public Authentication getAuthentication(HttpServletRequest request) {//Extrae los claims del token presente en la solicitud Http
         Claims claims = extractClaims(request);
         if (claims == null) {
@@ -84,6 +86,20 @@ public class JwtProviderImpl implements JwtProvider {
 
         //Crea y retorna un objeto UsernamePasswordAuthenticationToken que representa la autorización del usuario.
         return new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+    }
+
+    @Override
+    public boolean isTokenValid(HttpServletRequest request) {
+        Claims claims = extractClaims(request);
+        if (claims == null) {
+            return false;
+        }
+
+        if (claims.getExpiration().before(new Date())) {
+            return false;
+        }
+
+        return true;
     }
 
     //Los claims son las propiedades de los valores que están en el interior del token.
