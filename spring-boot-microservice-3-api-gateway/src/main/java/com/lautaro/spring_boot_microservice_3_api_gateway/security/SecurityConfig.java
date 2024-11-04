@@ -1,5 +1,6 @@
 package com.lautaro.spring_boot_microservice_3_api_gateway.security;
 
+import com.lautaro.spring_boot_microservice_3_api_gateway.security.jwt.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity //Habilita la configuración de seguridad en esta aplicación.
 @Configuration //Declara esta clase como una configuración de Spring
@@ -40,7 +42,8 @@ public class SecurityConfig {
                         //Configura la política de creación de sesiones como STATELESS
                         //Esto indica que no se debe guardar el estado de la sesión del usuario en el servidor.
                         //ideal para aplicaciónes si estado como una API RESTful.
-                );
+                )
+                .addFilterAfter(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build(); //Construye y devuelve la cadena de filtros configurada
     }
@@ -50,5 +53,10 @@ public class SecurityConfig {
         //Crea y expone un bean de AuthenticationManager para manejar autenticaciones
         return http.getSharedObject(AuthenticationManager.class);
         //Obtiene el AuthenticationManager compartido en el contexto de HttpSecurity
+    }
+
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter();
     }
 }
