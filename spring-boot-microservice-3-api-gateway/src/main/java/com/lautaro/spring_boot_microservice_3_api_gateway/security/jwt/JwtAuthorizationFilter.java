@@ -21,6 +21,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        String requestURI = request.getRequestURI();
+
+        //ignora las rutas de autenticación.
+        if (requestURI.equals("/api/v1/authentication/sign-up") || requestURI.equals("/api/v1/authentication/sign-in")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         //Obtiene la autenticación del usuario a partir del token JWT en la solicitud.
         Authentication authentication = jwtProvider.getAuthentication(request);
 

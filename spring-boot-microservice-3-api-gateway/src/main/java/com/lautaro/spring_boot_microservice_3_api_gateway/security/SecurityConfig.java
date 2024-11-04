@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,6 +24,15 @@ public class SecurityConfig {
 
     @Autowired
     private PasswordEncoder passwordEncoder; //Inyecta el codificador de contraseñas.
+
+    @Bean
+    public AuthenticationManager authenticationManager (HttpSecurity http) throws Exception{
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder);
+        return authenticationManagerBuilder.build();
+    }
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
@@ -48,12 +58,6 @@ public class SecurityConfig {
         return http.build(); //Construye y devuelve la cadena de filtros configurada
     }
 
-    @Bean
-    AuthenticationManager authenticationManager(HttpSecurity http) throws  Exception {
-        //Crea y expone un bean de AuthenticationManager para manejar autenticaciones
-        return http.getSharedObject(AuthenticationManager.class);
-        //Obtiene el AuthenticationManager compartido en el contexto de HttpSecurity
-    }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {

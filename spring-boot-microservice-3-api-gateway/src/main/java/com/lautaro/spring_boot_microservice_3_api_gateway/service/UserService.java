@@ -6,7 +6,7 @@ import com.lautaro.spring_boot_microservice_3_api_gateway.entities.User;
 import java.util.Optional;
 
 public interface UserService {
-    User sabeUser(User user);
+    User saveUser(User user);
 
     Optional<User> findByUsername(String username);
 
