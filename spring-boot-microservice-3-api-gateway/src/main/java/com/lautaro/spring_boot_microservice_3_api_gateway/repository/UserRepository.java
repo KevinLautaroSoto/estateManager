@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUserName(String username);
+    Optional<User> findByUsername(String username);
 
     @Modifying //como se trata de un metodo que astualiza data en una tabla de la base de datos se pone esto.
     @Query("update User set role=:role where username=:username")//sentencia SQL

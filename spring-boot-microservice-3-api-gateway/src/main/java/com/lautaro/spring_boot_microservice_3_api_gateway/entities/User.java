@@ -30,4 +30,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
+
+    @Transient //ya que no quiero que se almacene en la base de datos. Es temporal, ya que solo lo uso para mapear la data del usuario al hacer la autenticación.
+    private String token;
 }
