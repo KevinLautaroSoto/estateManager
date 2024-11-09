@@ -21,25 +21,38 @@
 
         @Override
         public User signInAndReturnJWT(User signInRequest) { //Método que realiza la autenticación del usuario y devuelve un token Jwt.
+            try {
 
-            //Crea un objeto UsernamePasswordAuthenticationToken con el nombre de usuario y contraseña.
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword())
-            ); //Autentica el usuario con el authenticationManager
+                System.out.println("Autenticando usuario: " + signInRequest.getUsername()); //Imprimir credenciales de entrada para verificación.
 
-            //obtiene el UserPrincipal del objeto Authentication
-            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+                //Crea un objeto UsernamePasswordAuthenticationToken con el nombre de usuario y contraseña.
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword())
+                ); //Autentica el usuario con el authenticationManager
 
-            //Genera un token jwt para el usuario utilizando el jwtProvider.
-            String jwt = jwtProvider.generateToken(userPrincipal);
+                Object principal = authentication.getPrincipal();
+                if (!(principal instanceof UserPrincipal userPrincipal)) {
+                    throw new RuntimeException("Error: El objeto principal no es de tipo UserPrincipal");
+                }
 
-            //Obtiene le objeto User del UserPrincipal
-            User signInUser = userPrincipal.getUser();
+                //obtiene el UserPrincipal del objeto Authentication
 
-            //Establece el token Jwt en el objeto User
-            signInUser.setToken(jwt);
+                //Genera un token jwt para el usuario utilizando el jwtProvider.
+                String jwt = jwtProvider.generateToken(userPrincipal);
 
-            //Devuelve el objeto User con el token JWT
-            return signInUser;
+                //Obtiene le objeto User del UserPrincipal
+                User signInUser = userPrincipal.getUser();
+
+                //Establece el token Jwt en el objeto User
+                signInUser.setToken(jwt);
+
+                System.out.println("Token generado exitosamente: " + jwt);//Verifica el token generado.
+
+                //Devuelve el objeto User con el token JWT
+                return signInUser;
+            } catch (Exception e) {
+                System.err.println("Error durante la autenticación: " + e.getMessage());
+                throw new RuntimeException("Error de autenticación: " + e.getMessage());
+            }
         }
     }

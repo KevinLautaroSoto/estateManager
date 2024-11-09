@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class JwtProviderImpl implements JwtProvider {
 
     //Clave secreta para firmar el token JWT, leida desde application.properties
-    @Value("&{app.jwt.secret}")
+    @Value("${app.jwt.secret}")
     private String JWT_SECRET;
 
     //Tiempo de expiración del token JWT.
