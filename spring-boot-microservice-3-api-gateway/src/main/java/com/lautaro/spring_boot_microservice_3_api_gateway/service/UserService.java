@@ -10,5 +10,5 @@ public interface UserService {
 
     Optional<User> findByUsername(String username);
 
-    void chanageRole (Role newRole, String username);
+    void changeRole(Role newRole, String username);
 }

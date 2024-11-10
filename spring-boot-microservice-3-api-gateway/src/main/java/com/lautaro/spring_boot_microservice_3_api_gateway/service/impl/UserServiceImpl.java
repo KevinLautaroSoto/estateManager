@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional //siempre que se use una sentencia SQL directa que modifique data directamente de una tabla como en el repository de este caso
     @Override
-    public void chanageRole(Role newRole, String username) {
+    public void changeRole(Role newRole, String username) {
         userRepository.updateUserRole(username, newRole);
     }
 

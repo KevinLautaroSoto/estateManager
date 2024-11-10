@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura política de sesión sin estado (ideal para APIs RESTful)
                 )
-                .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class); // Agrega el filtro JWT antes del filtro de autenticación
+                .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);// Agrega el filtro JWT antes del filtro de autenticación
 
         return http.build(); // Construye y devuelve la cadena de filtros configurada
     }
