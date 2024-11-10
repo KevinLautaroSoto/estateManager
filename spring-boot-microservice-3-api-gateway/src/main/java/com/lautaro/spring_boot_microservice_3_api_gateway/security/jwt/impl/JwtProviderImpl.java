@@ -1,5 +1,6 @@
 package com.lautaro.spring_boot_microservice_3_api_gateway.security.jwt.impl;
 
+import com.lautaro.spring_boot_microservice_3_api_gateway.entities.User;
 import com.lautaro.spring_boot_microservice_3_api_gateway.security.UserPrincipal;
 import com.lautaro.spring_boot_microservice_3_api_gateway.security.jwt.JwtProvider;
 import com.lautaro.spring_boot_microservice_3_api_gateway.utils.SecurityUtils;
@@ -55,6 +56,20 @@ public class JwtProviderImpl implements JwtProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();//Genera el token en formato completo.
     }
+
+    @Override
+    public String generateToken(User user) {
+        Key key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("roles", user.getRole())
+                .claim("userId", user.getId())
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_IN_MS))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
 
     @Override
     public Authentication getAuthentication(HttpServletRequest request) {//Extrae los claims del token presente en la solicitud Http
