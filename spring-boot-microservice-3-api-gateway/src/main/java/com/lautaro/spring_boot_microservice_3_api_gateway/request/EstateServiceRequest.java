@@ -17,7 +17,7 @@ public interface EstateServiceRequest {
     Object saveEstate(@RequestBody Object requestBody);
 
     @DeleteMapping("/{estateId}")
-    void deleteEstate(@PathVariable("inmuevleId") Long estateId);
+    void deleteEstate(@PathVariable("estateId") Long estateId);
 
     @GetMapping
     List<Object> getAllEstates();
