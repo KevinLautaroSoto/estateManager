@@ -4,8 +4,8 @@ import com.lautaro.spring_boot_microservice_3_api_gateway.security.jwt.JwtAuthor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,26 +26,29 @@ public class SecurityConfig {
     private PasswordEncoder passwordEncoder; // Codificador de contraseñas
 
 
-    // Configuración del AuthenticationManager
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    public AuthenticationManager authenticationManager (HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(customUserDetailsService)
+
+        authenticationManagerBuilder
+                .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
 
+
     // Configuración de la cadena de filtros de seguridad
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(AbstractHttpConfigurer::disable) // Desactiva CSRF, ya que no es necesario en APIs RESTful
-                .cors(AbstractHttpConfigurer::disable) // Desactiva CORS
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/authentication/sign-in", "/api/v1/authentication/sign-up").permitAll() // Permite acceso sin autenticación a rutas específicas
+                        .requestMatchers(HttpMethod.GET, "/gateway/estate").permitAll()
+                        .requestMatchers("/gateway/estate/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // Requiere autenticación para cualquier otra solicitud
                 )
-                .httpBasic(Customizer.withDefaults()) // Configura la autenticación básica HTTP
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura política de sesión sin estado (ideal para APIs RESTful)
                 )
@@ -59,4 +62,6 @@ public class SecurityConfig {
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter();
     }
+
+
 }
