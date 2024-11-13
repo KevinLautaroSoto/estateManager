@@ -7,6 +7,7 @@ import com.lautaro.spring_boot_microservice_3_api_gateway.security.jwt.JwtProvid
 import com.lautaro.spring_boot_microservice_3_api_gateway.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeRole(Role newRole, String username) {
         userRepository.updateUserRole(username, newRole);
+    }
+
+    @Override
+    public User findByUsernameReturnToken(String username) { //Metodo que busca un usuario por su username y lo retorna con su token.
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("The user doesn´t exits: " + username));
+
+        String jwt = jwtProvider.generateToken(user);
+        user.setToken(jwt);
+        return user;
     }
 
 
