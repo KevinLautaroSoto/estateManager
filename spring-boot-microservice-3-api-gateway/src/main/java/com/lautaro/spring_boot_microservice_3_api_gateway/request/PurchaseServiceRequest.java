@@ -11,7 +11,8 @@ import java.util.List;
 @FeignClient(
         value = "compra-service",
         path = "api/v1/purchase",
-        url = "${compras.service.url}",
+        //url = "${compras.service.url}", ya no necesito pasarle url desde application.properties. porque con el value compra-service
+        //eureka ya "sabe" a que microservicio debe conectares este microservicio y lo hace por nosotros
         configuration = FeignConfiguration.class
         )
 public interface PurchaseServiceRequest {
