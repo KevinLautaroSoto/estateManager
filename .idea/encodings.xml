@@ -2,5 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/spring-boot-microservice-1-inmueble/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-microservice-2-compra/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-microservice-3-api-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-microservice-4-eureka/src/main/java" charset="UTF-8" />
   </component>
 </project>

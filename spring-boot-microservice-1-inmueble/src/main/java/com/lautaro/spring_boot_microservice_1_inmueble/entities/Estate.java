@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name="inmueble")
-public class property {
+public class Estate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,7 @@ public class property {
     @Column(name="address", length = 500, nullable = false)
     private String address;
 
-    @Column(value = name"picture", length = 1200, nullable = true)
+    @Column(name = "picture", length = 1200, nullable = true)
     private String picture;
 
     @Column(name="price", nullable = false)
